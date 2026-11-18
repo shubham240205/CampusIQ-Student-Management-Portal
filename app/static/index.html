@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CampusIQ · Student Management Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="/static/style.css?v=2.1.0">
+</head>
+<body>
+<div id="login-screen" class="login-wrap">
+  <div class="login-art">
+    <div class="brand"><span class="brand-mark">C</span><span>Campus<span class="brand-light">IQ</span></span></div>
+    <div class="art-copy"><div class="eyebrow">ACADEMIC INTELLIGENCE PLATFORM</div><h1>Every student.<br><em>Every possibility.</em></h1><p>One connected space to understand progress, improve outcomes and keep learning on track.</p></div>
+    <div class="login-foot"><span>● LIVE ACADEMIC INSIGHTS</span><span>BUILT FOR BETTER LEARNING</span></div>
+  </div>
+  <div class="login-panel"><div class="login-card">
+    <div class="mobile-brand brand"><span class="brand-mark">C</span><span>Campus<span class="brand-light">IQ</span></span></div>
+    <div class="eyebrow">WELCOME BACK</div><h2>Sign in to your portal</h2><p class="muted">Use your campus credentials to continue.</p>
+    <form id="login-form"><label>Campus email</label><input id="email" type="email" value="teacher@campus.edu" required><label>Password</label><input id="password" type="password" value="Teacher@123" required><button class="primary full" type="submit">Sign in <span>→</span></button><div id="login-error" class="error"></div></form>
+    <div class="demo-box"><b>Demo access</b><div><span>Teacher</span><code>teacher@campus.edu / Teacher@123</code></div><div><span>Student</span><code>student&lt;ID&gt;@oulad.local / Student@123</code></div><div><span>Admin</span><code>admin@campus.edu / Admin@123</code></div></div>
+    <div class="login-note">OULAD historical learning analytics dataset · 28,785 unique student accounts</div>
+  </div></div>
+</div>
+<div id="app" class="app hidden">
+  <aside class="sidebar">
+    <div class="brand side-brand"><span class="brand-mark">C</span><span>Campus<span class="brand-light">IQ</span></span></div>
+    <div class="workspace"><span class="workspace-icon">⌂</span><div><b>SRM Campus</b><small>Academic workspace</small></div><span class="chev">⌄</span></div>
+    <div class="nav-label">WORKSPACE</div>
+    <nav id="navigation">
+      <button class="nav-item active" data-page="overview"><span>▦</span>Overview</button>
+      <button class="nav-item teacher-only" data-page="students"><span>♙</span>Students <i id="student-count">28,785</i></button>
+      <button class="nav-item" data-page="classes"><span>▤</span>Classes & timetable</button>
+      <button class="nav-item" data-page="assignments"><span>◷</span>Assignments</button>
+      <button class="nav-item teacher-only" data-page="records"><span>＋</span>Update records</button>
+    </nav>
+    <div class="sidebar-bottom"><div class="aws-card"><div class="aws-top"><span>☁</span><b>Cloud infrastructure</b></div><p>Deployment-ready on AWS EC2 with Docker.</p><a href="https://console.aws.amazon.com/ec2/home?region=ap-south-1" target="_blank" rel="noreferrer">Open AWS Console ↗</a></div>
+      <button class="nav-item" id="logout"><span>↪</span>Sign out</button>
+      <div class="side-version">CAMPUSIQ · PORTAL V1.0</div>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div class="crumb">Workspace <span>/</span> <b id="crumb-page">Overview</b></div><div class="top-actions"><span class="live-dot">● System operational</span><div class="avatar" id="avatar">AM</div><div class="user-meta"><b id="user-name">Aarav Mehta</b><small id="user-role">Faculty</small></div></div></header>
+    <div class="content">
+      <section id="page-overview" class="page">
+        <div class="page-heading"><div><div class="eyebrow" id="welcome-label">ACADEMIC OVERVIEW</div><h1 id="welcome-title">Good morning, Aarav <span>✦</span></h1><p id="welcome-subtitle">Here’s what’s happening across your classroom today.</p></div><div class="date-chip">◷ <span id="today-date"></span></div></div>
+        <div class="metric-grid" id="metrics"></div>
+        <div class="section-grid">
+          <div class="panel chart-panel"><div class="panel-head"><div><h3>Academic performance</h3><p>Average score by subject</p></div><span class="tag">CURRENT SEMESTER</span></div><div class="chart-wrap"><canvas id="performance-chart"></canvas></div></div>
+          <div class="panel insight-panel"><div class="panel-head"><div><h3>Student health</h3><p>Academic standing distribution</p></div><span class="more">•••</span></div><div class="donut-wrap"><canvas id="health-chart"></canvas><div class="donut-center"><b id="healthy-count">—</b><small>On track</small></div></div><div class="legend"><span><i class="green"></i>On track</span><span><i class="amber"></i>Needs attention</span><span><i class="red"></i>At risk</span></div></div>
+        </div>
+        <div class="panel table-panel"><div class="panel-head"><div><h3 id="table-title">Students needing attention</h3><p id="table-subtitle">Prioritised by recorded assessment performance and teacher-entered attendance</p></div><button class="text-button teacher-only" data-goto="students">View all students →</button></div><div id="overview-table"></div></div>
+        <div id="student-personal" class="student-personal hidden"></div>
+      </section>
+      <section id="page-students" class="page hidden">
+        <div class="page-heading"><div><div class="eyebrow">PEOPLE DIRECTORY</div><h1>Student directory</h1><p>Monitor academic progress and identify students who need support.</p></div><div class="date-chip">♙ <span id="directory-total">28,785 students</span></div></div>
+        <div class="panel"><div class="toolbar"><input id="student-search" placeholder="⌕  Search by name or roll number"><select id="status-filter"><option>All</option><option>At Risk</option><option>Needs Attention</option><option>On Track</option></select></div><div id="students-table"></div></div>
+      </section>
+      <section id="page-classes" class="page hidden">
+        <div class="page-heading"><div><div class="eyebrow">LEARNING SCHEDULE</div><h1>Classes & timetable</h1><p>Your semester schedule, subjects and classrooms in one view.</p></div></div>
+        <div class="metric-grid compact" id="subject-metrics"></div><div class="panel"><div class="panel-head"><div><h3>Weekly timetable</h3><p>Semester 5 · Computer Science</p></div><span class="tag">5 SUBJECTS</span></div><div id="timetable" class="timetable"></div></div>
+      </section>
+      <section id="page-assignments" class="page hidden">
+        <div class="page-heading"><div><div class="eyebrow">COURSEWORK</div><h1>Assignments</h1><p>Upcoming coursework and submission deadlines.</p></div></div><div class="assignment-grid" id="assignment-list"></div>
+      </section>
+      <section id="page-records" class="page hidden">
+        <div class="page-heading"><div><div class="eyebrow">FACULTY TOOLS</div><h1>Update academic records</h1><p>Record assessment scores and class attendance. Changes are saved to the database.</p></div></div>
+        <div class="record-grid">
+          <div class="panel form-panel"><div class="panel-head"><div><h3>Enter assessment marks</h3><p>Add a score to a student's academic record.</p></div><span class="form-icon">✎</span></div><form id="marks-form"><label>Student</label><select id="mark-student" required></select><label>Subject</label><select id="mark-subject" required></select><label>Assessment name</label><input id="assessment" value="Internal Assessment 2" required><div class="two-fields"><div><label>Score obtained</label><input id="score" type="number" min="0" max="100" required></div><div><label>Maximum score</label><input id="max-score" type="number" min="1" value="100" required></div></div><button class="primary full">Save marks <span>→</span></button><div class="success" id="marks-message"></div></form></div>
+          <div class="panel form-panel"><div class="panel-head"><div><h3>Mark attendance</h3><p>Record a student's attendance for a subject.</p></div><span class="form-icon">◷</span></div><form id="attendance-form"><label>Student</label><select id="attendance-student" required></select><label>Subject</label><select id="attendance-subject" required></select><label>Class date</label><input id="class-date" type="date" required><label>Attendance status</label><div class="attendance-choice"><label><input type="radio" name="present" value="true" checked> <span class="present">Present</span></label><label><input type="radio" name="present" value="false"> <span class="absent">Absent</span></label></div><button class="primary full">Save attendance <span>→</span></button><div class="success" id="attendance-message"></div></form></div>
+        </div>
+      </section>
+      <footer><span>© 2026 CampusIQ Academic Systems</span><span>Secure role-based access · <a href="https://aws.amazon.com/ec2/" target="_blank">AWS EC2</a> · <a href="https://docs.docker.com/" target="_blank">Docker</a> · <a href="https://github.com/" target="_blank">GitHub</a></span></footer>
+    </div>
+  </main>
+</div>
+<div id="detail-modal" class="modal hidden"><div class="modal-card"><button class="modal-close" id="modal-close">×</button><div id="detail-content"></div></div></div>
+<div id="toast" class="toast"></div>
+<script src="/static/app.js?v=2.1.0"></script>
+</body></html>

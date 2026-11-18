@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.db
+*.sqlite3
+data/oulad/*.csv
+!data/oulad/README.txt
+!data/oulad/.gitkeep
+*.pem
+*.key
+secrets/

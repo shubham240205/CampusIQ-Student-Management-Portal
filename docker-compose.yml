@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: campusiq-postgres
+    environment:
+      POSTGRES_DB: student_portal
+      POSTGRES_USER: portal_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ChangeThisDbPassword123!}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U portal_user -d student_portal"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  portal:
+    build: .
+    container_name: campusiq-portal
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://portal_user:${POSTGRES_PASSWORD:-ChangeThisDbPassword123!}@db:5432/student_portal
+      SECRET_KEY: ${SECRET_KEY:-replace-this-with-a-long-random-secret-before-deployment}
+      ACCESS_TOKEN_MINUTES: 720
+    volumes:
+      - ./data:/app/data:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  importer:
+    build: .
+    profiles: ["tools"]
+    command: ["python", "-m", "app.import_oulad"]
+    environment:
+      DATABASE_URL: postgresql+psycopg://portal_user:${POSTGRES_PASSWORD:-ChangeThisDbPassword123!}@db:5432/student_portal
+      SECRET_KEY: ${SECRET_KEY:-local-import-only}
+    volumes:
+      - ./data:/app/data:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
